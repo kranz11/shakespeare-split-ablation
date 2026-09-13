@@ -1,11 +1,12 @@
-import math
-import os
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
-class Chartokenizer(nn.Module):
-    def __init__(self,text:str):
+class Chartokenizer:
+    """Maps the characters present in `text` to contiguous integer ids.
+
+    Not an nn.Module - it holds no parameters, just two lookup dicts.
+    """
+
+    def __init__(self, text: str):
         chars = sorted(list(set(text)))
         self.vocab_size = len(chars)
         self.stoi = {ch: i for i, ch in enumerate(chars)}  # string -> int
