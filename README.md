@@ -31,7 +31,7 @@ drawn from the same scenes.
 | **train/val gap** | **0.344** | **0.112** |
 | val improved in last 10 evals | 3 / 10 | 7 / 10 |
 
-![loss curves](figures/loss_curves.png)
+![loss curves](loss_curves.png)
 
 The gap is the interesting number. Train loss ends up about the same in both
 runs, so the model has not learned more — the validation set has just moved
@@ -85,7 +85,7 @@ A small GPT-style decoder, written to be read rather than to be fast:
 ~12.7M parameters at the config below. Trains in a few hours on a laptop GPU.
 
 ```
-embed_dim   256      block_size  256      dropout   0.1
+input_dim   256      block_size  256      dropout   0.1
 num_heads   8        batch_size  32       lr        3e-4
 num_layers  8        max_iters   6000
 ```
@@ -100,25 +100,29 @@ scratch.
 
 | file | what it does |
 |---|---|
-| `config.py` | hyperparameters, paths, `SPLIT` flag |
+| `config.py` | hyperparameters, paths, and the `split_method` flag |
 | `model.py` | attention, feedforward, decoder block, `SmallLM` |
 | `data.py` | char tokenizer, batching, both split functions |
-| `train.py` | training loop, checkpointing, jsonl logging |
+| `train.py` | training loop, checkpointing, jsonl metric logging |
 | `generate.py` | load a checkpoint and sample from it |
-| `logs/` | the two training runs behind the table above |
-| `notebooks/results.ipynb` | reproduces the figure and the numbers |
+| `results.ipynb` | reproduces the figure and the table from the logs |
+| `logs/` | the two runs behind the numbers above |
 
 ## Running it
 
+Needs `torch`, `numpy` and `matplotlib`. Put `shakespeare.txt` in the repo
+root ([tiny Shakespeare](https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt)).
+
 ```bash
-pip install -r requirements.txt
-# set SPLIT = "contiguous" or "chunked" in config.py
+# in config.py: split_method = "chunk"   (or "tail")
 python train.py
 python generate.py
 ```
 
-Both logs are committed, so `notebooks/results.ipynb` reproduces the figure
-and the table without retraining anything.
+Each run writes `logs/train_{split_method}_{timestamp}.jsonl` and checkpoints
+to `checkpoints/{split_method}/model.pt`, so the two runs never overwrite each
+other. Both logs are committed — `results.ipynb` regenerates the figure and
+the table without retraining anything.
 
 ## License
 
