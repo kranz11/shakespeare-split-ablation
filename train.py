@@ -1,4 +1,4 @@
-import os
+import os,json
 from datetime import datetime
 import torch
 import torch.nn as nn
@@ -8,12 +8,25 @@ from config import *
 from model import SmallLM
 
 os.makedirs(log_dir, exist_ok=True)
-log_path = os.path.join(log_dir, f"train_{split_method}_{datetime.now():%Y%m%d_%H%M%S}.log")
+log_path = os.path.join(log_dir, f"train_{split_method}_{datetime.now():%Y%m%d_%H%M%S}.jsonl")
+
+checkpoint_dir = os.path.join(out_dir, split_method)
+os.makedirs(checkpoint_dir, exist_ok=True)
+checkpoint_path = os.path.join(checkpoint_dir, "model.pt")
 
 def log(msg):
     print(msg)
+
+def log_metrics(step, train_loss, val_loss, is_best=False):
+    """Metrics only, one JSON object per line."""
+    record = {
+        "step": step,
+        "train_loss": round(train_loss, 4),
+        "val_loss": round(val_loss, 4),
+        "is_best": is_best,
+    }
     with open(log_path, "a", encoding="utf-8") as f:
-        f.write(msg + "\n")
+        f.write(json.dumps(record) + "\n")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 log(f"Using device: {device}")
@@ -85,9 +98,6 @@ log(f"Model has {num_params:,} parameters")
 optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max_iters)
 
-os.makedirs(out_dir, exist_ok=True)
-checkpoint_path = os.path.join(out_dir, split_method, "model.pt")
-
 best_val_loss = float("inf")
 
 # ---- Training loop ---------------------------------------------------
@@ -103,7 +113,13 @@ for step in range(max_iters):
         if losses["val"] < best_val_loss:
             best_val_loss = losses["val"]
             save_checkpoint(best_val_loss)
-            log(f"  -> new best val loss {best_val_loss:.4f}, checkpoint saved")
+            is_best = True
+        else:
+            is_best = False
+        
+        log(f"step {step}: train {losses['train']:.4f}, val {losses['val']:.4f}"
+            + ("  <- best" if is_best else ""))
+        log_metrics(step, losses["train"], losses["val"], is_best)
 
     xb, yb = get_batch(train_data, block_size, batch_size, device)
 
