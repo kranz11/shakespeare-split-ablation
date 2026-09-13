@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class SelfAttentionHead(nn.Module):
-    def __init__(self,input_dim=int,head_size=int,block_size=int,dropout=float):
+    def __init__(self,input_dim:int,head_size:int,block_size:int,dropout:float):
         super().__init__()
         self.query = nn.Linear(input_dim, head_size, bias=False)
         self.key = nn.Linear(input_dim, head_size, bias=False)
@@ -28,7 +28,7 @@ class SelfAttentionHead(nn.Module):
         return out
 
 class Multiheadattention(nn.Module):
-    def __init__(self,input_dims=int,num_heads=int,block_size=int,dropout=float):
+    def __init__(self,input_dims:int,num_heads:int,block_size:int,dropout:float):
         super().__init__()
         assert input_dims % num_heads == 0, "embed_dim must be divisible by num_heads"
         head_size = input_dims // num_heads
@@ -47,7 +47,7 @@ class Multiheadattention(nn.Module):
         return out
 
 class Feedforward(nn.Module):
-    def __init__(self,input_dims=int,dropout=float):
+    def __init__(self,input_dims:int,dropout:float):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dims,4*input_dims),
