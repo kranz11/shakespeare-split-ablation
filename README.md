@@ -105,7 +105,7 @@ scratch.
 | `data.py` | char tokenizer, batching, both split functions |
 | `train.py` | training loop, checkpointing, jsonl metric logging |
 | `generate.py` | load a checkpoint and sample from it |
-| `results.ipynb` | reproduces the figure and the table from the logs |
+| `notebooks/results.ipynb` | reproduces the figure and the table from the logs |
 | `logs/` | the two runs behind the numbers above |
 
 ## Running it
