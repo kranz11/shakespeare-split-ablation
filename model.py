@@ -77,8 +77,7 @@ class SmallLM(nn.Module):
         super().__init__()
         self.block_size = block_size
         self.token_embedding = nn.Embedding(vocab_size, input_dim)
-        self.position_embedding = nn.Embedding(block_size, embed_dim)
-        self.pos_emb = nn.Embedding(block_size, input_dim)
+        self.position_embedding = nn.Embedding(block_size, input_dim)
         self.dropout = nn.Dropout(dropout)
         self.blocks = nn.ModuleList(
             [
