@@ -56,7 +56,7 @@ def save_checkpoint(val_loss):
             "itos": tokenizer.itos,
             "val_loss": val_loss,
             "config": {
-                "embed_dim": embed_dim,
+                "input_dim": input_dim,
                 "num_heads": num_heads,
                 "num_layers": num_layers,
                 "block_size": block_size,
@@ -72,7 +72,7 @@ def save_checkpoint(val_loss):
 # ---- Build the model -------------------------------------------------
 model = SmallLM(
     vocab_size=tokenizer.vocab_size,
-    input_dim=embed_dim,
+    input_dim=input_dim,
     num_heads=num_heads,
     num_layers=num_layers,
     block_size=block_size,
