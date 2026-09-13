@@ -108,15 +108,13 @@ for step in range(max_iters):
         losses = estimate_loss(
             model, train_data, val_data, block_size, batch_size, device
         )
-        log(f"step {step}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
-
         if losses["val"] < best_val_loss:
             best_val_loss = losses["val"]
             save_checkpoint(best_val_loss)
             is_best = True
         else:
             is_best = False
-        
+
         log(f"step {step}: train {losses['train']:.4f}, val {losses['val']:.4f}"
             + ("  <- best" if is_best else ""))
         log_metrics(step, losses["train"], losses["val"], is_best)
