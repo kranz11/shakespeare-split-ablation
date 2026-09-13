@@ -86,7 +86,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=max_iters)
 
 os.makedirs(out_dir, exist_ok=True)
-checkpoint_path = os.path.join(out_dir, "model.pt")
+checkpoint_path = os.path.join(out_dir, split_method, "model.pt")
 
 best_val_loss = float("inf")
 
