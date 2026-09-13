@@ -1,4 +1,4 @@
-embed_dim = 256        # size of each token's embedding vector
+input_dim = 256        # size of each token's embedding vector
 num_heads = 8           # number of parallel attention heads per block
 num_layers = 8          # number of stacked TransformerBlocks
 block_size = 256        # max context length (in tokens) the model can see at once
