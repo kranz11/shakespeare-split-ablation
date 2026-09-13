@@ -1,16 +1,28 @@
-input_dim = 256        # size of each token's embedding vector
-num_heads = 8           # number of parallel attention heads per block
-num_layers = 8          # number of stacked TransformerBlocks
-block_size = 256        # max context length (in tokens) the model can see at once
-batch_size = 32         # number of sequences processed per training step
-dropout = 0.1            # dropout probability, helps prevent overfitting
-lr = 3e-4                # learning rate for the AdamW optimizer
-max_iters = 6000         # total number of training steps
-eval_interval = 200      # how often (in steps) to print train/val loss
-out_dir = 'checkpoints'  # folder where the trained model checkpoint is saved
-log_dir = 'logs'  # folder where per-run training logs are saved
+import os
 
-data_path = 'shakespeare.txt'  # source text file to train on
-split_method = "chunk"  # "chunk" -> chunk_split (shuffled contiguous chunks), "tail" -> tail_split (last 10% as val)
+# ---- model ----
+input_dim   = 256        # size of each token's embedding vector
+num_heads   = 8          # number of parallel attention heads per block
+num_layers  = 8          # number of stacked transformer decoder blocks
+block_size  = 256        # max context length (in tokens) the model can see at once
+dropout     = 0.1        # dropout probability
 
-inference_path = "model.pt" # path to model.pt
+# ---- training ----
+batch_size    = 32       # sequences per training step
+lr            = 3e-4     # AdamW learning rate
+max_iters     = 6000     # total training steps
+eval_interval = 200      # how often (in steps) to evaluate train/val loss
+
+# ---- the experiment ----
+# "chunk" -> chunk_split: shuffle contiguous 4*block_size chunks, hold out 10%
+# "tail"  -> tail_split:  hold out the last 10% of the text
+# This is the only thing that differs between the two runs in the README.
+split_method = "chunk"
+
+# ---- paths (relative, so the repo runs anywhere) ----
+data_path = "shakespeare.txt"
+out_dir   = "checkpoints"
+log_dir   = "logs"
+
+# Checkpoints are written per split so the two runs don't overwrite each other.
+inference_path = os.path.join(out_dir, split_method, "model.pt")
