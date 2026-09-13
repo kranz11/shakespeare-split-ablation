@@ -30,7 +30,7 @@ class SelfAttentionHead(nn.Module):
 class Multiheadattention(nn.Module):
     def __init__(self,input_dims:int,num_heads:int,block_size:int,dropout:float):
         super().__init__()
-        assert input_dims % num_heads == 0, "embed_dim must be divisible by num_heads"
+        assert input_dims % num_heads == 0, "input_dim must be divisible by num_heads"
         head_size = input_dims // num_heads
         self.heads = nn.ModuleList(
             [
@@ -103,15 +103,15 @@ class SmallLM(nn.Module):
             f"Sequence length {T} exceeds block_size {self.block_size}"
         )
 
-        # Look up token embeddings: (B, T, embed_dim)
+        # Look up token embeddings: (B, T, input_dim)
         tok_emb = self.token_embedding(idx)
 
-        # Look up positional embeddings for positions 0..T-1: (T, embed_dim)
+        # Look up positional embeddings for positions 0..T-1: (T, input_dim)
         positions = torch.arange(T, device=idx.device)
         pos_emb = self.position_embedding(positions)
 
         # Combine token identity + position, then pass through the model.
-        x = self.dropout(tok_emb + pos_emb)  # (B, T, embed_dim), broadcasting over batch
+        x = self.dropout(tok_emb + pos_emb)  # (B, T, input_dim), broadcasting over batch
 
         for block in self.blocks:
             x = block(x)
