@@ -31,7 +31,7 @@ drawn from the same scenes.
 | **train/val gap** | **0.344** | **0.112** |
 | val improved in last 10 evals | 3 / 10 | 7 / 10 |
 
-![loss curves](figures\loss_curves.png)
+![loss curves](figures/loss_curves.png)
 
 The gap is the interesting number. Train loss ends up about the same in both
 runs, so the model has not learned more — the validation set has just moved
