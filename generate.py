@@ -14,7 +14,7 @@ print(f"Vocabulary size: {tokenizer.vocab_size} unique characters")
 
 model = SmallLM(
     vocab_size=tokenizer.vocab_size,
-    input_dim=embed_dim,
+    input_dim=input_dim,
     num_heads=num_heads,
     num_layers=num_layers,
     block_size=block_size,
