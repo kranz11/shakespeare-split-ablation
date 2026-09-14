@@ -121,8 +121,9 @@ python generate.py
 
 Each run writes `logs/train_{split_method}_{timestamp}.jsonl` and checkpoints
 to `checkpoints/{split_method}/model.pt`, so the two runs never overwrite each
-other. Both logs are committed — `results.ipynb` regenerates the figure and
-the table without retraining anything.
+other. Both logs are committed, so `notebooks/results.ipynb` regenerates the
+figure and the table without retraining anything (it chdirs to the repo root,
+so it works whether Jupyter is launched from `notebooks/` or from the root).
 
 ## License
 
