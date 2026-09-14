@@ -82,7 +82,7 @@ A small GPT-style decoder, written to be read rather than to be fast:
 - learned token and position embeddings
 - AdamW with cosine annealing, best-val checkpointing
 
-~12.7M parameters at the config below. Trains in a few hours on a laptop GPU.
+~6.5M parameters at the config below. Trains in a few hours on a laptop GPU.
 
 ```
 input_dim   256      block_size  256      dropout   0.1
